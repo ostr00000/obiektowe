@@ -11,9 +11,7 @@ public class Car {
 
 	Car(IWorldMap map, int x, int y) {
 		this.map = map;
-		Position poz = new Position(x, y);
-		if (!map.isOccupied(poz))
-			pozycja = poz;
+		pozycja = new Position(x, y);
 	}
 
 	public String toString() {
