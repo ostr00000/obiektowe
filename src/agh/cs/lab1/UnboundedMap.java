@@ -1,11 +1,7 @@
 package agh.cs.lab1;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class UnboundedMap implements IWorldMap{
+public class UnboundedMap extends AbstractWorldMap{
 	HayStack [] siano;
-	List<Car> cars=new ArrayList<>();
 	
 	UnboundedMap(HayStack [] siano){
 		this.siano=siano;
@@ -36,28 +32,11 @@ public class UnboundedMap implements IWorldMap{
 		return false;
 	}
 
-	@Override
-	public boolean add(Car car) {
-		if(!isOccupied(car.getPosition()))
-			return cars.add(car);
-		return false;
-	}
-
-	@Override
-	public void run(MoveDirection[] directions) {
-		int mod = cars.size();
-		for (int i = 0; i < directions.length; i++) {
-			cars.get(i % mod).move(directions[i]);
-		}
-		
-	}
+	
 
 	@Override
 	public boolean isOccupied(Position position) {
-		for(Car auto:cars){
-			if(auto.getPosition().equals(position))
-				return true;
-		}
+		if(isOccupiedAbs(position))return true;
 		for(HayStack sia:siano){
 			if(sia.getPosition().equals(position))
 				return true;
@@ -67,10 +46,8 @@ public class UnboundedMap implements IWorldMap{
 
 	@Override
 	public Object objectAt(Position position) {
-		for(Car car:cars){
-			if(car.getPosition().equals(position))
-				return car;
-		}
+		Object obj=objectAtAbs(position);
+		if(obj!=null)return obj;
 		for(HayStack sia:siano){
 			if(sia.getPosition().equals(position))
 				return sia;
