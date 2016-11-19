@@ -11,7 +11,6 @@ public class UnboundedMap extends AbstractWorldMap{
 	public String toString(){
 		int l=0,r=0,u=0,d=0;
 		for(Map.Entry<Position, Car> entry : cars.entrySet()){
-			System.out.println(entry.getValue().getPosition()+" -- ");
 			Car auto=entry.getValue();
 			Position p=auto.getPosition();
 			if(p.x<l)l=p.x;
@@ -26,7 +25,6 @@ public class UnboundedMap extends AbstractWorldMap{
 			if(p.y>u)u=p.y;
 			if(p.y<d)d=p.y;
 		}
-		System.out.println(new Position(l,d) + "  " + new Position(r,u));
 		MapVisualizer wynik=new MapVisualizer();
 		return wynik.dump(this, new Position(l,d), new Position(r,u));
 	}

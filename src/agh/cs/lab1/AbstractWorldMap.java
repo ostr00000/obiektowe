@@ -1,8 +1,6 @@
 package agh.cs.lab1;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractWorldMap implements IWorldMap {
@@ -22,19 +20,21 @@ public abstract class AbstractWorldMap implements IWorldMap {
 			return;
 		int len = directions.length;
 		for (int i = 0; i < len;) {
-			Map<Position, Car> newCars = new HashMap<>();
-			List<Position> toDelete = new LinkedList<>();
-			for (Car car : cars.values()) {
-				toDelete.add(car.getPosition());
-				car.move(directions[i++]);
-				newCars.put(car.getPosition(), car);
+			Map<Position, Car> copy = new HashMap<>(cars);
+			for (Car auto : copy.values()) {
+				cars.remove(auto.getPosition());
+				auto.move(directions[i++]);
+				cars.put(auto.getPosition(), auto);
 				if (i >= len)
 					break;
 			}
-			for (Position p : toDelete) {
-				cars.remove(p);
-			}
-			cars.putAll(newCars);
+			/*
+			 * Map<Position, Car> newCars = new HashMap<>(); List<Position>
+			 * toDelete = new LinkedList<>(); for (Car car : cars.values()) {
+			 * toDelete.add(car.getPosition()); car.move(directions[i++]);
+			 * newCars.put(car.getPosition(), car); if (i >= len) break; } for
+			 * (Position p : toDelete) { cars.remove(p); } cars.putAll(newCars);
+			 */
 			//// cars.get(i % mod).move(directions[i]);
 		}
 	}
