@@ -1,49 +1,48 @@
 package agh.cs.lab1;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractWorldMap implements IWorldMap {
-	Map<Position, Car> cars = new HashMap<>();
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeListener {
+	protected Map<Position, IMapElement> elements = new HashMap<>();
+	private List<Car> cars=new ArrayList<>();
+	
+	@Override
+	public void positionChanged(Position oldPos, Position newPos) {
+		IMapElement auto = elements.remove(oldPos);
+		elements.put(newPos, auto);
+	}
 
 	@Override
 	public void add(Car car) {
-		if (!isOccupied(car.getPosition()))
-			cars.put(car.getPosition(), car);
-		else
+		if (isOccupied(car.getPosition()))
 			throw new IllegalArgumentException("pole " + car.getPosition() + " jest juz zajete");
+		elements.put(car.getPosition(), car);
+		cars.add(car);
+		car.addListener(this);
+
 	}
 
 	@Override
 	public void run(MoveDirection[] directions) {
-		if (cars.isEmpty())
+		if (elements.isEmpty())
 			return;
-		int len = directions.length;
-		for (int i = 0; i < len;) {
-			Map<Position, Car> copy = new HashMap<>(cars);
-			for (Car auto : copy.values()) {
-				cars.remove(auto.getPosition());
+		for (int i = 0, len = directions.length; i < len;) {
+			for(Car auto:cars){
 				auto.move(directions[i++]);
-				cars.put(auto.getPosition(), auto);
 				if (i >= len)
 					break;
 			}
-			/*
-			 * Map<Position, Car> newCars = new HashMap<>(); List<Position>
-			 * toDelete = new LinkedList<>(); for (Car car : cars.values()) {
-			 * toDelete.add(car.getPosition()); car.move(directions[i++]);
-			 * newCars.put(car.getPosition(), car); if (i >= len) break; } for
-			 * (Position p : toDelete) { cars.remove(p); } cars.putAll(newCars);
-			 */
-			//// cars.get(i % mod).move(directions[i]);
 		}
 	}
 
-	protected boolean isOccupiedAbs(Position position) {
-		return cars.containsKey(position);
+	public boolean isOccupied(Position position) {
+		return elements.containsKey(position);
 	}
 
-	protected Object objectAtAbs(Position position) {
-		return cars.get(position);
+	public Object objectAt(Position position) {
+		return elements.get(position);
 	}
 }

@@ -21,15 +21,4 @@ public class RectangularMap extends AbstractWorldMap{
 		MapVisualizer wynik=new MapVisualizer();
 		return wynik.dump(this,lewoDol,prawoGora);
 	}
-
-	@Override
-	public boolean isOccupied(Position position) {
-		return isOccupiedAbs(position);
-	}
-
-	@Override
-	public Object objectAt(Position position) {
-		return objectAtAbs(position);
-	}
-
 }

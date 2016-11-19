@@ -1,9 +1,13 @@
 package agh.cs.lab1;
 
-public class Car implements IMapElement{
+import java.util.LinkedList;
+import java.util.List;
+
+public class Car implements IMapElement {
 	private IWorldMap map;
 	private Position pozycja = new Position(0, 0);
 	private MapDirection kierunek = MapDirection.North;
+	private List<IPositionChangeListener> listeners = new LinkedList<>();
 
 	Car(IWorldMap map) {
 		this.map = map;
@@ -12,7 +16,7 @@ public class Car implements IMapElement{
 	Car(IWorldMap map, int x, int y) {
 		this.map = map;
 		pozycja = new Position(x, y);
-			
+
 	}
 
 	public String toString() {
@@ -67,11 +71,26 @@ public class Car implements IMapElement{
 			break;
 		}
 		if (map.canMoveTo(nowa)) {
+			this.positionChanged(nowa);
 			this.pozycja = nowa;
 		}
 	}
 
 	public Position getPosition() {
 		return this.pozycja;
+	}
+
+	void addListener(IPositionChangeListener listener) {
+		listeners.add(listener);
+	}
+
+	void removeListener(IPositionChangeListener listener) {
+		listeners.remove(listener);
+	}
+
+	void positionChanged(Position newPos) {
+		for(IPositionChangeListener lis:listeners){
+			lis.positionChanged(this.pozycja, newPos);
+		}
 	}
 }

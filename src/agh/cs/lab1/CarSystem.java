@@ -12,8 +12,8 @@ public class CarSystem {
 				tabSiana[i] = new HayStack(new Position(rand.nextInt(10), rand.nextInt(10)));
 			}
 
-			IWorldMap map = new RectangularMap(10, 5);
-			//IWorldMap map = new UnboundedMap(tabSiana);
+			//IWorldMap map = new RectangularMap(10, 5);
+			IWorldMap map = new UnboundedMap(tabSiana);
 			map.add(new Car(map));
 			map.add(new Car(map, 1, 0));
 			map.run(directions);

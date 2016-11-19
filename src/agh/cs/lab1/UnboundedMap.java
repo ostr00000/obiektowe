@@ -3,23 +3,16 @@ package agh.cs.lab1;
 import java.util.Map;
 
 public class UnboundedMap extends AbstractWorldMap{
-	HayStack [] siano;
 	
 	UnboundedMap(HayStack [] siano){
-		this.siano=siano;
+		for(HayStack s:siano){
+			elements.put(s.getPosition(), s);
+		}
 	}
 	public String toString(){
 		int l=0,r=0,u=0,d=0;
-		for(Map.Entry<Position, Car> entry : cars.entrySet()){
-			Car auto=entry.getValue();
-			Position p=auto.getPosition();
-			if(p.x<l)l=p.x;
-			if(p.x>r)r=p.x;
-			if(p.y>u)u=p.y;
-			if(p.y<d)d=p.y;
-		}
-		for(HayStack sia:siano){
-			Position p=sia.getPosition();
+		for(Map.Entry<Position, IMapElement> entry : elements.entrySet()){
+			Position p=entry.getValue().getPosition();
 			if(p.x<l)l=p.x;
 			if(p.x>r)r=p.x;
 			if(p.y>u)u=p.y;
@@ -34,28 +27,4 @@ public class UnboundedMap extends AbstractWorldMap{
 		if(!isOccupied(position))return true;
 		return false;
 	}
-
-	
-
-	@Override
-	public boolean isOccupied(Position position) {
-		if(isOccupiedAbs(position))return true;
-		for(HayStack sia:siano){
-			if(sia.getPosition().equals(position))
-				return true;
-		}
-		return false;
-	}
-
-	@Override
-	public Object objectAt(Position position) {
-		Object obj=objectAtAbs(position);
-		if(obj!=null)return obj;
-		for(HayStack sia:siano){
-			if(sia.getPosition().equals(position))
-				return sia;
-		}
-		return null;
-	}
-
 }
