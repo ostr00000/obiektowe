@@ -1,6 +1,6 @@
 package agh.cs.lab1;
 
-public class Car {
+public class Car implements IMapElement{
 	private IWorldMap map;
 	private Position pozycja = new Position(0, 0);
 	private MapDirection kierunek = MapDirection.North;
@@ -11,9 +11,8 @@ public class Car {
 
 	Car(IWorldMap map, int x, int y) {
 		this.map = map;
-		Position poz = new Position(x, y);
-		if (!map.isOccupied(poz))
-			pozycja = poz;
+		pozycja = new Position(x, y);
+			
 	}
 
 	public String toString() {
@@ -72,7 +71,7 @@ public class Car {
 		}
 	}
 
-	Position getPosition() {
+	public Position getPosition() {
 		return this.pozycja;
 	}
 }

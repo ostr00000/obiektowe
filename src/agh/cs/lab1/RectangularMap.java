@@ -1,12 +1,8 @@
 package agh.cs.lab1;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RectangularMap extends AbstractWorldMap{
 	public Position lewoDol = new Position(0, 0);
 	public Position prawoGora;
-	List<Car> cars = new ArrayList<>();
 
 	public RectangularMap(int width, int height) {
 		prawoGora = new Position(width, height);

@@ -26,7 +26,7 @@ public interface IWorldMap {
 	 *            The car to add.
 	 * @return True if the car was added.
 	 */
-	boolean add(Car car);
+	void add(Car car);
 
 	/**
 	 * Move the cars on the map according to the provided move directions. Every
