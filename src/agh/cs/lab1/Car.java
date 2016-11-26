@@ -71,8 +71,9 @@ public class Car implements IMapElement {
 			break;
 		}
 		if (map.canMoveTo(nowa)) {
-			this.positionChanged(nowa);
+			Position old = this.pozycja; 
 			this.pozycja = nowa;
+			this.positionChanged(old);
 		}
 	}
 
@@ -88,9 +89,9 @@ public class Car implements IMapElement {
 		listeners.remove(listener);
 	}
 
-	void positionChanged(Position newPos) {
+	void positionChanged(Position oldPos) {
 		for(IPositionChangeListener lis:listeners){
-			lis.positionChanged(this.pozycja, newPos);
+			lis.positionChanged(oldPos, this.pozycja);
 		}
 	}
 }
