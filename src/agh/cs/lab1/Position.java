@@ -26,15 +26,28 @@ public class Position {
 		return new Position(this.x + oth.x, this.y + oth.y);
 	}
 
-	public boolean equals(Object other) {
-		if (this == other)
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
+	}//(0,31),(1,0)
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		if (!(other instanceof Position))
+		if (obj == null)
 			return false;
-		Position that = (Position) other;
-		if (that.x == this.x && that.y == this.y) {
-			return true;
-		} else
+		if (!(obj instanceof Position))
 			return false;
+		Position other = (Position) obj;
+		if (x != other.x)
+			return false;
+		if (y != other.y)
+			return false;
+		return true;
 	}
 }

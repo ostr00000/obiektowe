@@ -1,41 +1,48 @@
 package agh.cs.lab1;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public abstract class AbstractWorldMap implements IWorldMap {
-	List<Car> cars=new ArrayList<>();
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeListener {
+	protected Map<Position, IMapElement> elements = new HashMap<>();
+	private List<Car> cars=new ArrayList<>();
 	
 	@Override
-	public boolean add(Car car) {
-		if(!isOccupied(car.getPosition()))
-			return cars.add(car);
-		return false;
+	public void positionChanged(Position oldPos, Position newPos) {
+		IMapElement auto = elements.remove(oldPos);
+		elements.put(newPos, auto);
 	}
-	
+
+	@Override
+	public void add(Car car) {
+		if (isOccupied(car.getPosition()))
+			throw new IllegalArgumentException("pole " + car.getPosition() + " jest juz zajete");
+		elements.put(car.getPosition(), car);
+		cars.add(car);
+		car.addListener(this);
+
+	}
+
 	@Override
 	public void run(MoveDirection[] directions) {
-		int mod = cars.size();
-		if(mod==0)return;
-		for (int i = 0; i < directions.length; i++) {
-			cars.get(i % mod).move(directions[i]);
+		if (elements.isEmpty())
+			return;
+		for (int i = 0, len = directions.length; i < len;) {
+			for(Car auto:cars){
+				auto.move(directions[i++]);
+				if (i >= len)
+					break;
+			}
 		}
-	}
-	
-	protected boolean isOccupiedAbs(Position position) {
-		for(Car auto:cars){
-			if(auto.getPosition().equals(position))
-				return true;
-		}
-		return false;
 	}
 
-	
-	protected Object objectAtAbs(Position position) {
-		for(Car car:cars){
-			if(car.getPosition().equals(position))
-				return car;
-		}
-		return null;
+	public boolean isOccupied(Position position) {
+		return elements.containsKey(position);
+	}
+
+	public Object objectAt(Position position) {
+		return elements.get(position);
 	}
 }
